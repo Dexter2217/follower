@@ -13,7 +13,7 @@ class followedArtists extends Component {
     componentDidMount () {
         //Fetch the data via this.props.fetchFollowedArtists
         console.log("fetched followed artists:");
-        console.log(this.props.fetchFollowedArtists());
+        this.props.fetchFollowedArtists();
     }
     renderArtists () {
         //Return concatenated <li>'s for each artist
