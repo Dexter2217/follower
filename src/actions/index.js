@@ -10,7 +10,7 @@ const queryString = require("query-string");
 
 export function fetchFollowedArtists () {
     //Make axios API call
-    let parsed = queryString.parse(location.search);
+    let parsed = queryString.parse(window.location.search);
     console.log("queryString parsed is");
     console.log(parsed);
     let followedArtistsUrl = ROOT_URL + "";
