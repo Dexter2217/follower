@@ -9,11 +9,11 @@ import { connect } from 'react-redux';
 import { fetchFollowedArtists } from "../actions";
 
 
-class followedArtists extends Component {
+class FollowedArtists extends Component {
     componentDidMount () {
         //Fetch the data via this.props.fetchFollowedArtists
         console.log("fetched followed artists:");
-        console.log(this.props.fetchFollowedArtists());
+        this.props.fetchFollowedArtists();
     }
     renderArtists () {
         //Return concatenated <li>'s for each artist
@@ -40,3 +40,7 @@ class followedArtists extends Component {
     }
     
 }
+function mapStateToProps(state) {
+    return { followedArtists: state.followedArtists };
+}
+export default connect({fetchFollowedArtists})(FollowedArtists);
