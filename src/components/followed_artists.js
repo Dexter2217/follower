@@ -43,4 +43,4 @@ class FollowedArtists extends Component {
 function mapStateToProps(state) {
     return { followedArtists: state.followedArtists };
 }
-export default connect({fetchFollowedArtists})(FollowedArtists);
+export default connect(mapStateToProps, {fetchFollowedArtists})(FollowedArtists);
