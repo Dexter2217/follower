@@ -5,16 +5,30 @@ import axios from "axios";
 
 export const FETCH_FOLLOWED_ARTISTS = "fetch_followed_artists";
 
-const ROOT_URL = "";
-const queryString = require("query-string");
+const ROOT_URL = "https://api.spotify.com/v1/me";
+//const queryString = require("query-string");
+//const queryString = require('querystring');
+const cookies = require('js-cookie');
 
 export function fetchFollowedArtists () {
     //Make axios API call
-    let parsed = queryString.parse(window.location.search);
-    console.log("queryString parsed is");
-    console.log(parsed);
-    let followedArtistsUrl = ROOT_URL + "";
-    let request = axios.get(followedArtistsUrl);
+    console.log("cookies is in index.js...");
+    console.log(cookies);
+    let access_token = cookies.get('access-token');
+    console.log("Access token is");
+    console.log(access_token);
+    var scope = "user-follow-read";
+    let config = {
+        url: "/following",
+        method: "get",
+        baseURL: ROOT_URL,
+        params: {
+            type: "artist"
+        },
+        headers: {"Authorization": "Bearer " + access_token}
+    }
+    let followedArtistsUrl = ROOT_URL + "/following";
+    let request = axios(config);
 
     //Return actionCreator object that gets sent to the reducer
     return {

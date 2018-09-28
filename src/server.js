@@ -5,10 +5,12 @@ const path = require('path');
 var cors = require('cors');
 const querystring = require('querystring');
 const app = express();
+const cookieParser = require('cookie-parser');
 const CLIENT_ID = "";
 const CLIENT_SECRET = "";
 console.log(__dirname);
 //app.use(express.static(path.join(__dirname, 'public')).use(cors()));
+app.use(cookieParser());
 
 app.use(express.static(path.join(__dirname, 'public')))
    .use(cors());
@@ -19,7 +21,7 @@ return res.send('pong');
 });
 
 app.get('/login', function (req, res) {
-    var scope = "user-read-private user-read-email";
+    var scope = "user-read-private user-read-email user-follow-read";
     res.redirect('http://accounts.spotify.com/authorize?' +
     querystring.stringify({
         response_type: 'code',
@@ -44,6 +46,7 @@ app.get('/callback', function (req, res) {
         },
         json: true
     };
+    
 
     request.post(authOptions, function (error, response, body) {
         console.log("body is");
@@ -53,8 +56,10 @@ app.get('/callback', function (req, res) {
         if (!error && response.statusCode === 200) {
             var access_token = body.access_token,
             refresh_token = body.refresh_token;
+            res.cookie('access-token', access_token);
+            //cookies.set('access-token', access_token);
 
-            res.redirect('http://localhost:3000/' +
+            res.redirect('http://localhost:3000?' +
                 querystring.stringify({
                     access_token: access_token,
                     refresh_token: refresh_token
@@ -66,6 +71,6 @@ app.get('/callback', function (req, res) {
 // app.get('/', function (req, res) {
 //   res.sendFile(path.join(__dirname, 'build', 'index.html'));
 // });
-console.log("port is...");
+console.log("port is:");
 console.log(process.env.PORT);
 app.listen(process.env.PORT || 8080);
