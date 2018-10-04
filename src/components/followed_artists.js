@@ -21,8 +21,9 @@ class FollowedArtists extends Component {
         //this.props.followed_artists
 
         //Loop through each artist and return an <li> for each one
+        var {items} = (typeof this.props.followedArtists.data === "undefined") ? {} : this.props.followedArtists.data.artists;
 
-        return _.map(this.props.followedArtists, artist => {
+        return _.map(items, artist => {
             return (
                 <li key={artist.name}>{artist.name}</li>
             );
