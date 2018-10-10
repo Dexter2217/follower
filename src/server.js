@@ -1,15 +1,26 @@
-const express = require('express');
+const express = require('C:/Users/Dexter/AppData/Local/Microsoft/TypeScript/2.9/node_modules/@types/express');
 const request = require('request');
-const bodyParser = require('body-parser');
+const bodyParser = require('C:/Users/Dexter/AppData/Local/Microsoft/TypeScript/2.9/node_modules/@types/body-parser');
 const path = require('path');
-var cors = require('cors');
+var cors = require('C:/Users/Dexter/AppData/Local/Microsoft/TypeScript/2.9/node_modules/@types/cors');
 const querystring = require('querystring');
 const app = express();
-const cookieParser = require('cookie-parser');
+const cookieParser = require('C:/Users/Dexter/AppData/Local/Microsoft/TypeScript/2.9/node_modules/@types/cookie-parser');
 const CLIENT_ID = "";
 const CLIENT_SECRET = "";
+const stateKey = "spotify_auth_state";
+
+import {CLIENT_ID} from "./credentials.mjs";
 console.log(__dirname);
 //app.use(express.static(path.join(__dirname, 'public')).use(cors()));
+
+var generateStateString = () => {
+    let randArray = [];
+    for (i=0; i<5; i++) {
+        randArray.push(Math.floor(Math.random() * 10));
+    }
+    return randArray.join("");
+}
 app.use(cookieParser());
 
 app.use(express.static(path.join(__dirname, 'public')))
@@ -22,55 +33,65 @@ return res.send('pong');
 
 app.get('/login', function (req, res) {
     var scope = "user-read-private user-read-email user-follow-read";
+    var state = generateStateString();
+    res.cookie(stateKey, state);
     res.redirect('http://accounts.spotify.com/authorize?' +
     querystring.stringify({
         response_type: 'code',
         client_id: CLIENT_ID,
         scope: scope,
-        redirect_uri: 'http://localhost:8080/callback'
+        redirect_uri: 'http://localhost:8080/callback',
+        state: state
     }))
 });
 
 app.get('/callback', function (req, res) {
-    console.log("CALLBACK");
     var code = req.query.code || null;
-    var authOptions = {
-        url: 'https://accounts.spotify.com/api/token',
-        form: {
-            code: code,
-            redirect_uri: 'http://localhost:8080/callback',
-            grant_type: 'authorization_code'
-        },
-        headers: {
-            'Authorization': 'Basic ' + (new Buffer(CLIENT_ID + ':' + CLIENT_SECRET).toString('base64'))
-        },
-        json: true
-    };
+    var state = req.query.state;
+    var storedState = req.cookies ? req.cookies[stateKey] : null;
+    console.log(`state is ${state} and storedstate is ${storedState}`);
+    if (state === null || state !== storedState) {
+        res.redirect("/#?" + 
+        querystring.stringify({
+            error: "state mismatch"
+        }));
+    } else {
+        var authOptions = {
+            url: 'https://accounts.spotify.com/api/token',
+            form: {
+                code: code,
+                redirect_uri: 'http://localhost:8080/callback',
+                grant_type: 'authorization_code'
+            },
+            headers: {
+                'Authorization': 'Basic ' + (new Buffer(CLIENT_ID + ':' + CLIENT_SECRET).toString('base64'))
+            },
+            json: true
+        };
+        
     
-
-    request.post(authOptions, function (error, response, body) {
-        console.log("body is");
-        console.log(body);
-        console.log("response is");
-        console.log(response);
-        if (!error && response.statusCode === 200) {
-            var access_token = body.access_token,
-            refresh_token = body.refresh_token;
-            res.cookie('access-token', access_token);
-            //cookies.set('access-token', access_token);
-
-            res.redirect('http://localhost:3000?' +
-                querystring.stringify({
-                    access_token: access_token,
-                    refresh_token: refresh_token
-                }));
-        }
-    });
+        request.post(authOptions, function (error, response, body) {
+            console.log("body is");
+            console.log(body);
+            console.log("response is");
+            console.log(response);
+            if (!error && response.statusCode === 200) {
+                var access_token = body.access_token,
+                refresh_token = body.refresh_token;
+                res.cookie('access-token', access_token);
+    
+                res.redirect('http://localhost:3000?' +
+                    querystring.stringify({
+                        access_token: access_token,
+                        refresh_token: refresh_token
+                    }));
+            }
+        });
+    }
 });
 
 // app.get('/', function (req, res) {
 //   res.sendFile(path.join(__dirname, 'build', 'index.html'));
 // });
-console.log("port is:");
-console.log(process.env.PORT);
+console.log("Server is running on port 8080");
 app.listen(process.env.PORT || 8080);
