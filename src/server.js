@@ -1,21 +1,23 @@
-const express = require('C:/Users/Dexter/AppData/Local/Microsoft/TypeScript/2.9/node_modules/@types/express');
+const express = require('express');
 const request = require('request');
-const bodyParser = require('C:/Users/Dexter/AppData/Local/Microsoft/TypeScript/2.9/node_modules/@types/body-parser');
+const bodyParser = require('body-parser');
 const path = require('path');
-var cors = require('C:/Users/Dexter/AppData/Local/Microsoft/TypeScript/2.9/node_modules/@types/cors');
+var cors = require('cors');
 const querystring = require('querystring');
 const app = express();
-const cookieParser = require('C:/Users/Dexter/AppData/Local/Microsoft/TypeScript/2.9/node_modules/@types/cookie-parser');
-const CLIENT_ID = "";
-const CLIENT_SECRET = "";
+const cookieParser = require('cookie-parser');
+//const { CLIENT_ID, CLIENT_SECRET } = require('./credentials.js');
+const credentials = require('./credentials.js');
+// const CLIENT_ID = "";
+// const CLIENT_SECRET = "";
 const stateKey = "spotify_auth_state";
 
-import {CLIENT_ID} from "./credentials.mjs";
+//import {CLIENT_ID} from "./credentials.mjs";
 console.log(__dirname);
 //app.use(express.static(path.join(__dirname, 'public')).use(cors()));
 
 var generateStateString = () => {
-    let randArray = [];
+    var randArray = [];
     for (i=0; i<5; i++) {
         randArray.push(Math.floor(Math.random() * 10));
     }
@@ -38,7 +40,7 @@ app.get('/login', function (req, res) {
     res.redirect('http://accounts.spotify.com/authorize?' +
     querystring.stringify({
         response_type: 'code',
-        client_id: CLIENT_ID,
+        client_id: credentials.CLIENT_ID,
         scope: scope,
         redirect_uri: 'http://localhost:8080/callback',
         state: state
@@ -64,7 +66,7 @@ app.get('/callback', function (req, res) {
                 grant_type: 'authorization_code'
             },
             headers: {
-                'Authorization': 'Basic ' + (new Buffer(CLIENT_ID + ':' + CLIENT_SECRET).toString('base64'))
+                'Authorization': 'Basic ' + (new Buffer(credentials.CLIENT_ID + ':' + credentials.CLIENT_SECRET).toString('base64'))
             },
             json: true
         };
