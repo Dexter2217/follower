@@ -8,8 +8,6 @@ const app = express();
 const cookieParser = require('cookie-parser');
 //const { CLIENT_ID, CLIENT_SECRET } = require('./credentials.js');
 const credentials = require('./credentials.js');
-// const CLIENT_ID = "";
-// const CLIENT_SECRET = "";
 const stateKey = "spotify_auth_state";
 
 //import {CLIENT_ID} from "./credentials.mjs";
@@ -73,15 +71,17 @@ app.get('/callback', function (req, res) {
         
     
         request.post(authOptions, function (error, response, body) {
-            console.log("body is");
-            console.log(body);
-            console.log("response is");
-            console.log(response);
+            var access_token,
+                refresh_token;
+            // console.log("body is");
+            // console.log(body);
+            // console.log("response is");
+            // console.log(response);
             if (!error && response.statusCode === 200) {
-                var access_token = body.access_token,
+                access_token = body.access_token;
                 refresh_token = body.refresh_token;
                 res.cookie('access-token', access_token);
-    
+                res.cookie('refresh-token', refresh_token);
                 res.redirect('http://localhost:3000?' +
                     querystring.stringify({
                         access_token: access_token,
@@ -90,6 +90,33 @@ app.get('/callback', function (req, res) {
             }
         });
     }
+});
+
+app.get('/refresh', (req, res) => {
+    //Make the token refresh call
+    var currentRefreshToken = res.cookie('refresh-token');
+    var refreshOptions = {
+        headers: { 'Authorization': 'Basic ' + (new Buffer(credentials.CLIENT_ID + ':' + credentials.CLIENT_SECRET).toString('base64')) },
+        url: "https://accounts.spotify.com/api/token",
+        form: {
+            grant_type: "refresh_token",
+            refresh_token: currentRefreshToken
+        }
+    };
+
+    request.post(refreshOptions, (error, response, body) => {
+        console.log("refresh body is %o", body);
+        console.log("refresh response is %o", response);
+        var sendObj = {
+            access_token: body.access_token,
+            refresh_token: body.refresh_token,
+            expires_in: body.expires_in
+        };
+        console.log("Will be sending %o", sendObj);
+
+        res.send(sendObj);
+    });
+    //Set the new access token to the access_token cookie.
 });
 
 // app.get('/', function (req, res) {
