@@ -94,29 +94,46 @@ app.get('/callback', function (req, res) {
 
 app.get('/refresh', (req, res) => {
     //Make the token refresh call
-    var currentRefreshToken = res.cookie('refresh-token');
-    var refreshOptions = {
-        headers: { 'Authorization': 'Basic ' + (new Buffer(credentials.CLIENT_ID + ':' + credentials.CLIENT_SECRET).toString('base64')) },
-        url: "https://accounts.spotify.com/api/token",
-        form: {
-            grant_type: "refresh_token",
-            refresh_token: currentRefreshToken
-        }
-    };
-
-    request.post(refreshOptions, (error, response, body) => {
-        console.log("refresh body is %o", body);
-        console.log("refresh response is %o", response);
-        var sendObj = {
-            access_token: body.access_token,
-            refresh_token: body.refresh_token,
-            expires_in: body.expires_in
+    console.log("Begin /refresh");
+    var currentRefreshToken = res.cookie('refresh-token'),
+        refreshOptions;
+    if (!currentRefreshToken) {
+        console.log("currentRefreshToken is false");
+        res.status(401).send("Invalid access token");
+    } else {
+        console.log("currentRefreshToken is true");
+        refreshOptions = {
+            headers: { 'Authorization': 'Basic ' + (new Buffer(credentials.CLIENT_ID + ':' + credentials.CLIENT_SECRET).toString('base64')) },
+            url: "https://accounts.spotify.com/api/token",
+            form: {
+                grant_type: "refresh_token",
+                refresh_token: currentRefreshToken
+            },
+            json: true
         };
-        console.log("Will be sending %o", sendObj);
-
-        res.send(sendObj);
-    });
-    //Set the new access token to the access_token cookie.
+        console.log("request is...");
+        console.log(request);
+        request.post(refreshOptions, function (error, response, body) {
+            console.log("request.post has been initiated");
+            if (error) {
+                console.log("error is %o", error);
+                res.status(500).send("System Error. Please try again later.");
+            } else {
+                console.log("refresh body is %o", body);
+                console.log("refresh response is %o", response);
+                var sendObj = {
+                    access_token: body.access_token,
+                    refresh_token: body.refresh_token,
+                    expires_in: body.expires_in
+                };
+                 //Set the new access token to the access_token cookie.
+                res.cookie('access-token', sendObj.access_token);
+                res.cookie('refresh-token', sendObj.refresh_token);
+                console.log("Will be sending %o", sendObj);
+                res.send(sendObj);
+            }
+        });
+    }
 });
 
 // app.get('/', function (req, res) {

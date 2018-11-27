@@ -9,9 +9,10 @@ import Authenticator from './components/Authenticator';
 //import registerServiceWorker from './registerServiceWorker';
 import promise from 'redux-promise';
 import reducers from "./reducers";
+import thunk from 'redux-thunk';
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 
-const createStoreWithMiddleware = applyMiddleware(promise)(createStore);
+const createStoreWithMiddleware = applyMiddleware(promise, thunk)(createStore);
 
 ReactDOM.render(
     <Provider store={createStoreWithMiddleware(reducers)}>
