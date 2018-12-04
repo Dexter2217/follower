@@ -15,7 +15,8 @@ async function getRefreshToken (successCallback, failureCallback) {
     var refreshConfig = {
         url: "/refresh",
         baseURL: "http://localhost:8080/",
-        method: "get"
+        method: "get",
+        withCredentials: true
     }
 
     try {

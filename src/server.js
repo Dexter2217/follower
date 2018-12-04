@@ -28,6 +28,8 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 app.get('/ping', function (req, res) {
     console.log("pong from console");
+    console.log("pong request object");
+    console.log(req.cookies);
 return res.send('pong');
 });
 
@@ -48,6 +50,8 @@ app.get('/login', function (req, res) {
 app.get('/callback', function (req, res) {
     var code = req.query.code || null;
     var state = req.query.state;
+    console.log("Inside /callback, request object is");
+    console.log(req);
     var storedState = req.cookies ? req.cookies[stateKey] : null;
     console.log(`state is ${state} and storedstate is ${storedState}`);
     if (state === null || state !== storedState) {
@@ -92,11 +96,14 @@ app.get('/callback', function (req, res) {
     }
 });
 
-app.get('/refresh', (req, res) => {
+app.get('/refresh', function (req, res) {
     //Make the token refresh call
     console.log("Begin /refresh");
-    var currentRefreshToken = res.cookie('refresh-token'),
+    console.log("request object is");
+    console.log(req.cookies);
+    var currentRefreshToken = req.cookies['refresh-token'],
         refreshOptions;
+    console.log(currentRefreshToken);
     if (!currentRefreshToken) {
         console.log("currentRefreshToken is false");
         res.status(401).send("Invalid access token");
@@ -111,8 +118,8 @@ app.get('/refresh', (req, res) => {
             },
             json: true
         };
-        console.log("request is...");
-        console.log(request);
+        //console.log("request is...");
+        //console.log(request);
         request.post(refreshOptions, function (error, response, body) {
             console.log("request.post has been initiated");
             if (error) {
