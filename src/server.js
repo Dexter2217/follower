@@ -42,7 +42,7 @@ app.get('/login', function (req, res) {
         response_type: 'code',
         client_id: credentials.CLIENT_ID,
         scope: scope,
-        redirect_uri: 'http://localhost:8080/callback',
+        redirect_uri: 'http://localhost:8081/callback',
         state: state
     }))
 });
@@ -64,7 +64,7 @@ app.get('/callback', function (req, res) {
             url: 'https://accounts.spotify.com/api/token',
             form: {
                 code: code,
-                redirect_uri: 'http://localhost:8080/callback',
+                redirect_uri: 'http://localhost:8081/callback',
                 grant_type: 'authorization_code'
             },
             headers: {
@@ -104,13 +104,17 @@ app.get('/refresh', function (req, res) {
     var currentRefreshToken = req.cookies['refresh-token'],
         refreshOptions;
     console.log(currentRefreshToken);
+    res.header("Access-Control-Allow-Origin", "http://localhost:3000" );
+    res.header("Access-Control-Allow-Credentials", "true");
     if (!currentRefreshToken) {
         console.log("currentRefreshToken is false");
         res.status(401).send("Invalid access token");
     } else {
         console.log("currentRefreshToken is true");
         refreshOptions = {
-            headers: { 'Authorization': 'Basic ' + (new Buffer(credentials.CLIENT_ID + ':' + credentials.CLIENT_SECRET).toString('base64')) },
+            headers: { 
+                'Authorization': 'Basic ' + (new Buffer(credentials.CLIENT_ID + ':' + credentials.CLIENT_SECRET).toString('base64'))
+            },
             url: "https://accounts.spotify.com/api/token",
             form: {
                 grant_type: "refresh_token",
@@ -146,5 +150,5 @@ app.get('/refresh', function (req, res) {
 // app.get('/', function (req, res) {
 //   res.sendFile(path.join(__dirname, 'build', 'index.html'));
 // });
-console.log("Server is running on port 8080");
-app.listen(process.env.PORT || 8080);
+console.log("Server is running on port 8081");
+app.listen(process.env.PORT || 8081);
