@@ -1,11 +1,11 @@
 import axios from "axios";
-import { resolve } from "path";
 
 //Declare constants that will be the 'type' in each actionCreator sent by functions
 //defined in this file
 
 export const FETCH_FOLLOWED_ARTISTS = "fetch_followed_artists";
 export const FETCH_FOLLOWED_ARTISTS_ERROR = "fetch_followed_artists_error";
+export const SET_CURRENT_ARTIST = "set_current_artist";
 
 const ROOT_URL = "https://api.spotify.com/v1/me";
 const cookies = require('js-cookie');
@@ -66,5 +66,12 @@ export function fetchFollowedArtists () {
                 dispatch({type: FETCH_FOLLOWED_ARTISTS_ERROR, payload: response});
             })
         });
+    }
+}
+
+export function selectArtist (artist) {
+    return {
+        type: SET_CURRENT_ARTIST,
+        payload: artist
     }
 }

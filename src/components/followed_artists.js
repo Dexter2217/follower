@@ -6,7 +6,7 @@
 import _ from "lodash";
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { fetchFollowedArtists } from "../actions";
+import { fetchFollowedArtists, selectArtist } from "../actions";
 
 
 class FollowedArtists extends Component {
@@ -25,7 +25,7 @@ class FollowedArtists extends Component {
 
         return _.map(artists, artist => {
             return (
-                <li key={artist.name}>{artist.name}</li>
+                <li key={artist.name} onClick={() => {this.props.selectArtist(artist)}}>{artist.name}</li>
             );
         });
     }
@@ -44,4 +44,4 @@ class FollowedArtists extends Component {
 function mapStateToProps(state) {
     return { followedArtists: state.followedArtists };
 }
-export default connect(mapStateToProps, {fetchFollowedArtists})(FollowedArtists);
+export default connect(mapStateToProps, {fetchFollowedArtists, selectArtist})(FollowedArtists);
