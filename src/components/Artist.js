@@ -15,7 +15,7 @@ class Artist extends Component {
     render() {
       return (
         <div>
-            <Container>
+            <Container className="artist-container">
                 <Row>
                     <span>{this.props.currentArtist.name}</span>
                 </Row>
@@ -25,7 +25,7 @@ class Artist extends Component {
                     </ul>
                 </Row>
                 <Row>
-                    <span><a href={this.props.currentArtist.href}>Listen</a></span>
+                    <span><a href={this.props.currentArtist.uri}>Listen</a></span>
                 </Row>
             </Container>
         </div>
