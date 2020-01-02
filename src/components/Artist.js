@@ -12,10 +12,22 @@ class Artist extends Component {
             );
         });
     }
+    getImage() {
+        var currentImageUrl = (this.props.currentArtist.images && this.props.currentArtist.images.length > 0) ? 
+            this.props.currentArtist.images[0].url :
+            "/images/default-artist-image.png";
+        return currentImageUrl;
+
+    }
     render() {
       return (
         <div>
             <Container className="artist-container">
+                <Row>
+                    <div>
+                        <img alt="current artist" src={this.getImage()}/>
+                    </div>
+                </Row>
                 <Row>
                     <span>{this.props.currentArtist.name}</span>
                 </Row>
