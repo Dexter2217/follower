@@ -14,9 +14,10 @@ import thunk from 'redux-thunk';
 import { BrowserRouter, Route} from "react-router-dom";
 
 const createStoreWithMiddleware = applyMiddleware(promise, thunk)(createStore);
+var initialState = {currentPage: 0};
 
 ReactDOM.render(
-    <Provider store={createStoreWithMiddleware(reducers)}>
+    <Provider store={createStoreWithMiddleware(reducers, initialState)}>
         <BrowserRouter>
             <div>
                 <Route path="/" component={App}/>

@@ -7,13 +7,19 @@ import _ from "lodash";
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { fetchFollowedArtists, selectArtist } from "../actions";
-
+import Pagination from './Pagination';
+const ARTIST_PER_PAGE = 10;
 
 class FollowedArtists extends Component {
     componentDidMount () {
         //Fetch the data via this.props.fetchFollowedArtists
         console.log("fetched followed artists:");
         this.props.fetchFollowedArtists();
+    }
+    getMaxPageCount () {
+        // Calculate the MaxPageCount via this.props.followedArtists
+        let artistTotal = this.props.followedArtists.length;
+        return Math.ceil(artistTotal / ARTIST_PER_PAGE) - 1;
     }
     renderArtists () {
         //Return concatenated <li>'s for each artist
@@ -22,8 +28,10 @@ class FollowedArtists extends Component {
 
         //Loop through each artist and return an <li> for each one
         var artists = (typeof this.props.followedArtists === "undefined") ? {} : this.props.followedArtists;
+        let startingPoint = this.props.currentPage * ARTIST_PER_PAGE;
+        var artistGroup = artists.slice(startingPoint, startingPoint + ARTIST_PER_PAGE);
 
-        return _.map(artists, artist => {
+        return _.map(artistGroup, artist => {
             return (
                 <li key={artist.name} onClick={() => {this.props.selectArtist(artist)}}>{artist.name}</li>
             );
@@ -32,16 +40,20 @@ class FollowedArtists extends Component {
 
     render () {
         //returns DOM wrapper and calls this.renderArtists()
+        var maxPageCount = this.getMaxPageCount();
 
-        return ( 
-            <ul className="list-group">
-                {this.renderArtists()}
-            </ul>
+        return (
+            <div>
+                <ul className="list-group">
+                    {this.renderArtists()}
+                </ul>
+                <Pagination maxPageCount={maxPageCount}/>
+            </div>
         );
     }
     
 }
 function mapStateToProps(state) {
-    return { followedArtists: state.followedArtists };
+    return { followedArtists: state.followedArtists, currentPage: state.currentPage };
 }
 export default connect(mapStateToProps, {fetchFollowedArtists, selectArtist})(FollowedArtists);

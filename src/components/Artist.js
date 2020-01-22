@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Container, Row } from 'react-bootstrap';
 import { connect } from "react-redux";
+import "../css/Artist.css";
 
 //This container just needs to read the currentArtist state. So it should probably accept the "prop"
 // of currentArtist.
@@ -22,10 +23,10 @@ class Artist extends Component {
     render() {
       return (
         <div>
-            <Container className="artist-container">
+            <Container>
                 <Row>
                     <div>
-                        <img alt="current artist" src={this.getImage()}/>
+                        <img className="artist-hero-image" alt="current artist" src={this.getImage()}/>
                     </div>
                 </Row>
                 <Row>
