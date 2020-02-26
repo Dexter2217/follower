@@ -7,10 +7,6 @@ import "../css/Artist.css";
 class Artist extends Component {
 	constructor(props) {
 		super(props);
-
-		this.state = {
-			//currentImageIndex: 0
-		};
 	}
 	renderGenres() {
 		return this.props.currentArtist.genres.map((genre, index) => {

@@ -20,7 +20,6 @@ const selectFollowedArtist = (state) => {
 const matchesSearchTerm = (artist, term) => {
     let artistName = artist.name.toUpperCase();
     return (typeof term !== 'undefined') ? artistName.includes(term.toUpperCase()) : true;
-    //return artistName.includes(this.props.current_search_term.toUpperCase());
 }
 
 class FollowedArtists extends Component {
@@ -28,9 +27,6 @@ class FollowedArtists extends Component {
         //Fetch the data via this.props.fetchFollowedArtists
         console.log("fetched followed artists:");
         this.props.fetchFollowedArtists();
-    }
-    getFilteredArtists () {
-        //Maybe filter the artist list whenever you need it?
     }
     getMaxPageCount () {
         // Calculate the MaxPageCount via this.props.followedArtists
@@ -44,9 +40,7 @@ class FollowedArtists extends Component {
 
         //Loop through each artist and return an <li> for each one
         let artists = (typeof this.props.followedArtists === "undefined") ? {} : this.props.followedArtists;
-        //let filteredArtists = Array.from(artists).filter(this.matchesSearchTerm.bind(this));
         let startingPoint = this.props.currentPage * ARTIST_PER_PAGE;
-        //let artistGroup = filteredArtists.slice(startingPoint, startingPoint + ARTIST_PER_PAGE);
         let artistGroup = artists.slice(startingPoint, startingPoint + ARTIST_PER_PAGE);
         return _.map(artistGroup, artist => {
             return (
@@ -63,9 +57,6 @@ class FollowedArtists extends Component {
             <Fragment>
                 <Search followedArtists={this.props.followedArtists}/>
                 <div className="followed-artists">
-                    {/* <ul className="followed-artists__list-group">
-                        {this.renderArtists()}
-                    </ul> */}
                     {this.renderArtists()}
                     <Pagination maxPageCount={maxPageCount}/>
                 </div>
@@ -74,8 +65,7 @@ class FollowedArtists extends Component {
     }
 }
 function mapStateToProps(state) {
-    return { 
-        // followedArtists: state.followedArtists,
+    return {
         followedArtists: selectFollowedArtist(state),
         currentPage: state.currentPage,
         currentSearchTerm: state.currentSearchTerm
