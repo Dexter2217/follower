@@ -98,11 +98,12 @@ app.get('/callback', function (req, res) {
 
 app.get('/refresh', function (req, res) {
     //Make the token refresh call
-    console.log("Begin /refresh");
-    console.log("request object is");
-    console.log(req.cookies);
+    //console.log("Begin /refresh");
+    //console.log("request object is");
+    //console.log(req.cookies);
     var currentRefreshToken = req.cookies['refresh-token'],
         refreshOptions;
+    console.log('currentRefreshToken is:');
     console.log(currentRefreshToken);
     res.header("Access-Control-Allow-Origin", "http://localhost:3000" );
     res.header("Access-Control-Allow-Credentials", "true");
@@ -130,8 +131,8 @@ app.get('/refresh', function (req, res) {
                 console.log("error is %o", error);
                 res.status(500).send("System Error. Please try again later.");
             } else {
-                console.log("refresh body is %o", body);
-                console.log("refresh response is %o", response);
+                //console.log("refresh body is %o", body);
+                //console.log("refresh response is %o", response);
                 var sendObj = {
                     access_token: body.access_token,
                     refresh_token: body.refresh_token,

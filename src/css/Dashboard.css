@@ -1,0 +1,26 @@
+html {
+    height: 100%;
+}
+
+body {
+    background: linear-gradient(to bottom, #434343, #000000);
+    color:  #1DB954;
+}
+
+.dashboard {
+    display: flex;
+    justify-content: space-around;
+}
+
+.dashboard__right-rail {
+    display: flex;
+    flex-direction: column;
+}
+
+.brand-logo {
+    bottom: 0;
+    float: right;
+    position: absolute;
+    right: 0;
+    width: 100px;
+}

@@ -1,0 +1,7 @@
+.followed-artists {
+    color:  #1DB954
+}
+.followed-artists__list-group {
+    list-style: none;
+    padding: 0;
+}

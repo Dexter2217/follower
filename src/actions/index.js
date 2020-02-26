@@ -7,6 +7,8 @@ export const FETCH_FOLLOWED_ARTISTS = "fetch_followed_artists";
 export const FETCH_FOLLOWED_ARTISTS_ERROR = "fetch_followed_artists_error";
 export const SET_CURRENT_ARTIST = "set_current_artist";
 export const SET_CURRENT_PAGE = 'set_current-page';
+export const UPDATE_SEARCH_TERM = 'update_search_term';
+export const SET_FOLLOWED_ARTISTS = 'set_followed_artists';
 
 const ROOT_URL = "https://api.spotify.com/v1/me";
 const cookies = require('js-cookie');
@@ -77,6 +79,13 @@ export function selectArtist (artist) {
     }
 }
 
+export function updateFollowedArtists (followedArtists) {
+    return {
+        type: FETCH_FOLLOWED_ARTISTS,
+        payload: followedArtists
+    }
+}
+
 export function incrementPage (currentPage) {
     return {
         type: SET_CURRENT_PAGE,
@@ -88,5 +97,12 @@ export function decrementPage (currentPage) {
     return {
         type: SET_CURRENT_PAGE,
         payload: --currentPage
+    }
+}
+
+export function updateSearchTerm (newTerm) {
+    return {
+        type: UPDATE_SEARCH_TERM,
+        payload: newTerm
     }
 }

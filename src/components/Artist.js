@@ -1,54 +1,53 @@
 import React, { Component } from 'react';
-import { Container, Row } from 'react-bootstrap';
 import { connect } from "react-redux";
 import "../css/Artist.css";
 
 //This container just needs to read the currentArtist state. So it should probably accept the "prop"
 // of currentArtist.
 class Artist extends Component {
-    renderGenres() {
-        return this.props.currentArtist.genres.map((genre, index) => {
-            return (
-                <li key={index}>{genre}</li>
-            );
-        });
-    }
-    getImage() {
-        var currentImageUrl = (this.props.currentArtist.images && this.props.currentArtist.images.length > 0) ? 
-            this.props.currentArtist.images[0].url :
-            "/images/default-artist-image.png";
-        return currentImageUrl;
+	constructor(props) {
+		super(props);
 
-    }
-    render() {
-      return (
-        <div>
-            <Container>
-                <Row>
-                    <div>
-                        <img className="artist-hero-image" alt="current artist" src={this.getImage()}/>
-                    </div>
-                </Row>
-                <Row>
-                    <span>{this.props.currentArtist.name}</span>
-                </Row>
-                <Row>
-                    <ul className="artist__genre-list">
-                        {this.renderGenres()}
-                    </ul>
-                </Row>
-                <Row>
-                    <span><a href={this.props.currentArtist.uri}>Listen</a></span>
-                </Row>
-            </Container>
-        </div>
-      );
-    }
+		this.state = {
+			//currentImageIndex: 0
+		};
+	}
+	renderGenres() {
+		return this.props.currentArtist.genres.map((genre, index) => {
+			return (
+				<p key={index}>{genre}</p>
+			);
+		});
+	}
+	getImage() {
+		var currentImageUrl = (this.props.currentArtist.images && this.props.currentArtist.images.length > 0) ? 
+			this.props.currentArtist.images[0].url :
+			"/images/default-artist-image.png";
+		return currentImageUrl;
+
+	}
+	render() {
+		return (
+		<div className="artist">
+			<h2>{this.props.currentArtist.name}</h2>
+			<div className="artist__image-container">
+				<img className="artist__image" alt="current artist" src={this.getImage()}/>
+			</div>
+			<div className="artist__info">
+				<h3>Genres</h3>
+				<div className="artist__genre-list">
+					{this.renderGenres()}
+				</div>
+				<span><a href={this.props.currentArtist.uri}>Listen</a></span>
+			</div>
+		</div>
+	  );
+	}
   }
 
 function mapStateToProps(state) {
-    return {
-        currentArtist: state.currentArtist
-    };
+	return {
+		currentArtist: state.currentArtist
+	};
 }
 export default connect(mapStateToProps)(Artist);

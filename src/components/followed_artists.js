@@ -4,17 +4,33 @@
 
 //Import modules
 import _ from "lodash";
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { fetchFollowedArtists, selectArtist } from "../actions";
 import Pagination from './Pagination';
+import Search from './Search';
+import '../css/FollowedArtists.css';
 const ARTIST_PER_PAGE = 10;
+
+const selectFollowedArtist = (state) => {
+    let artists = (typeof state.followedArtists === "undefined") ? {} : state.followedArtists;
+    return Array.from(artists).filter((artist) => matchesSearchTerm(artist, state.currentSearchTerm));
+}
+
+const matchesSearchTerm = (artist, term) => {
+    let artistName = artist.name.toUpperCase();
+    return (typeof term !== 'undefined') ? artistName.includes(term.toUpperCase()) : true;
+    //return artistName.includes(this.props.current_search_term.toUpperCase());
+}
 
 class FollowedArtists extends Component {
     componentDidMount () {
         //Fetch the data via this.props.fetchFollowedArtists
         console.log("fetched followed artists:");
         this.props.fetchFollowedArtists();
+    }
+    getFilteredArtists () {
+        //Maybe filter the artist list whenever you need it?
     }
     getMaxPageCount () {
         // Calculate the MaxPageCount via this.props.followedArtists
@@ -27,13 +43,14 @@ class FollowedArtists extends Component {
         //this.props.followed_artists
 
         //Loop through each artist and return an <li> for each one
-        var artists = (typeof this.props.followedArtists === "undefined") ? {} : this.props.followedArtists;
+        let artists = (typeof this.props.followedArtists === "undefined") ? {} : this.props.followedArtists;
+        //let filteredArtists = Array.from(artists).filter(this.matchesSearchTerm.bind(this));
         let startingPoint = this.props.currentPage * ARTIST_PER_PAGE;
-        var artistGroup = artists.slice(startingPoint, startingPoint + ARTIST_PER_PAGE);
-
+        //let artistGroup = filteredArtists.slice(startingPoint, startingPoint + ARTIST_PER_PAGE);
+        let artistGroup = artists.slice(startingPoint, startingPoint + ARTIST_PER_PAGE);
         return _.map(artistGroup, artist => {
             return (
-                <li key={artist.name} onClick={() => {this.props.selectArtist(artist)}}>{artist.name}</li>
+                <p key={artist.name} onClick={() => {this.props.selectArtist(artist)}}>{artist.name}</p>
             );
         });
     }
@@ -43,17 +60,25 @@ class FollowedArtists extends Component {
         var maxPageCount = this.getMaxPageCount();
 
         return (
-            <div>
-                <ul className="list-group">
+            <Fragment>
+                <Search followedArtists={this.props.followedArtists}/>
+                <div className="followed-artists">
+                    {/* <ul className="followed-artists__list-group">
+                        {this.renderArtists()}
+                    </ul> */}
                     {this.renderArtists()}
-                </ul>
-                <Pagination maxPageCount={maxPageCount}/>
-            </div>
+                    <Pagination maxPageCount={maxPageCount}/>
+                </div>
+            </Fragment>
         );
     }
-    
 }
 function mapStateToProps(state) {
-    return { followedArtists: state.followedArtists, currentPage: state.currentPage };
+    return { 
+        // followedArtists: state.followedArtists,
+        followedArtists: selectFollowedArtist(state),
+        currentPage: state.currentPage,
+        currentSearchTerm: state.currentSearchTerm
+    };
 }
 export default connect(mapStateToProps, {fetchFollowedArtists, selectArtist})(FollowedArtists);

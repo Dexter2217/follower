@@ -1,4 +1,37 @@
-.artist-hero-image {
+.artist {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+}
+
+.artist__info {
+    //background: linear-gradient(to bottom, #654ea3, black);
+    border-radius: 45px;
+    border: 5px solid #1DB954;
+    color: white;
+    margin-top: 40px;
+    padding: 20px 180px;
+    text-align: center;
+}
+
+.artist__info h3 {
+    color: #1DB954;
+}
+
+.artist__genre-list {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin: 0 auto;
+}
+
+.artist__genre-list p {
+    padding-right: 10px;
+}
+
+.artist__image {
     height: 320px;
     width: 320px;
 }

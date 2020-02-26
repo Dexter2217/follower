@@ -1,22 +1,21 @@
 import React, { Component } from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
 import FollowedArtists from './Followed_Artists';
 import Artist from './Artist';
+import '../css/Dashboard.css';
 
 class Dashboard extends Component {
     render() {
       return (
         <div>
-            <h1>Dashboard</h1>
-            <Container>
-                <Row>
-                    <Col><Artist/></Col>
-                    <Col><FollowedArtists/></Col>
-                </Row>
-            </Container>;
+            <div className="dashboard">
+                <Artist/>
+                <div className="dashboard__right-rail">
+                  <FollowedArtists/>
+                </div>
+            </div>
+            <img className='brand-logo' alt='spotify logo' src='../../images/Spotify_Logo_RGB_Green.png'/>
         </div>
       );
     }
   }
-  
   export default Dashboard;
