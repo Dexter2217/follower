@@ -100,6 +100,13 @@ export function decrementPage (currentPage) {
     }
 }
 
+export function setPage (pageNum) {
+    return {
+        type: SET_CURRENT_PAGE,
+        payload: pageNum
+    }
+}
+
 export function updateSearchTerm (newTerm) {
     return {
         type: UPDATE_SEARCH_TERM,

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {updateSearchTerm, updateFollowedArtists} from '../actions';
+import {updateSearchTerm, updateFollowedArtists, setPage} from '../actions';
 import "../css/Search.css";
 
 class Search extends Component {
@@ -8,6 +8,7 @@ class Search extends Component {
         //Update the current_search_term state value with whatever is in the input field
         let term = event.currentTarget.value;
         this.props.updateSearchTerm(term);
+        this.props.setPage(0);
     }
     matchesSearchTerm (artist, term) {
         let artistName = artist.name.toUpperCase();
@@ -25,4 +26,4 @@ function mapStateToProps (state) {
     }
 }
 
-export default connect(mapStateToProps, {updateSearchTerm, updateFollowedArtists})(Search);
+export default connect(mapStateToProps, {updateSearchTerm, updateFollowedArtists, setPage})(Search);

@@ -5,9 +5,6 @@ import "../css/Artist.css";
 //This container just needs to read the currentArtist state. So it should probably accept the "prop"
 // of currentArtist.
 class Artist extends Component {
-	constructor(props) {
-		super(props);
-	}
 	renderGenres() {
 		return this.props.currentArtist.genres.map((genre, index) => {
 			return (
