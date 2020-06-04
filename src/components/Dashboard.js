@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import FollowedArtists from './Followed_Artists';
+import FollowedArtists from './followed_artists';
 import Artist from './Artist';
-import '../css/Dashboard.css';
+import '../scss/Dashboard.scss';
 
 class Dashboard extends Component {
     render() {

@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {incrementPage, decrementPage} from '../actions';
-import "../css/Pagination.css";
+import "../scss/Pagination.scss";
 
 class Pagination extends Component {
     render() {
@@ -9,7 +9,7 @@ class Pagination extends Component {
         let nextButton = (currentPage < this.props.maxPageCount) ? <span onClick={() => this.props.incrementPage(currentPage)}>next</span> : "";
         let prevButton = (currentPage > 0) ? <span onClick={() => this.props.decrementPage(currentPage)}>prev</span> : "";
         return (
-            <div class="page-control">
+            <div className="page-control">
                 {prevButton}<span>{this.props.currentPage}</span>{nextButton}
             </div>
         );

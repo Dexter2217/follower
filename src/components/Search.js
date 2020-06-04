@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {updateSearchTerm, updateFollowedArtists, setPage} from '../actions';
-import "../css/Search.css";
+import "../scss/Search.scss";
 
 class Search extends Component {
     handleChange (event) {

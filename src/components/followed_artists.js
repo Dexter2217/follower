@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 import { fetchFollowedArtists, selectArtist } from "../actions";
 import Pagination from './Pagination';
 import Search from './Search';
-import '../css/FollowedArtists.css';
+import '../scss/FollowedArtists.scss';
 const ARTIST_PER_PAGE = 10;
 
 const selectFollowedArtist = (state) => {
@@ -34,11 +34,11 @@ class FollowedArtists extends Component {
         return Math.ceil(artistTotal / ARTIST_PER_PAGE) - 1;
     }
     renderArtists () {
-        //Return concatenated <li>'s for each artist
+        //Return <p>'s for each artist
         //Access the followed_artists state property via
         //this.props.followed_artists
 
-        //Loop through each artist and return an <li> for each one
+        //Loop through each artist and return a <p> for each one
         let artists = (typeof this.props.followedArtists === "undefined") ? {} : this.props.followedArtists;
         let startingPoint = this.props.currentPage * ARTIST_PER_PAGE;
         let artistGroup = artists.slice(startingPoint, startingPoint + ARTIST_PER_PAGE);

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
-import "../css/Artist.css";
+import "../scss/Artist.scss";
 
 //This container just needs to read the currentArtist state. So it should probably accept the "prop"
 // of currentArtist.

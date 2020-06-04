@@ -1,9 +1,26 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import {render, unmountComponentAtNode} from 'react-dom';
+import { act } from "react-dom/test-utils";
 import Login from './components/Login';
 
-it('renders without crashing', () => {
-  const div = document.createElement('div');
-  ReactDOM.render(<Login />, div);
-  ReactDOM.unmountComponentAtNode(div);
+let container = null;
+
+beforeEach(() => {
+  container = document.createElement('div');
+  document.body.appendChild(container);
+});
+
+afterEach(() => {
+  unmountComponentAtNode(container);
+  container.remove();
+  container = null;
+});
+
+it('renders the link with the correct endpoint', () => {
+  act(() => {
+    render(<Login />, container);
+  });
+  let url = container.querySelector('a').href;
+
+  expect(url).toContain("/login");
 });
