@@ -4,12 +4,12 @@ import Login from './Login';
 const cookies = require('js-cookie');
 
 class App extends Component {
-    constructor () {
-        super();
-        this.access_token = cookies.get('access-token');
+    getAccessToken () {
+        return cookies.get('access-token');
     }
+
     render () {
-        if (this.access_token) {
+        if (this.getAccessToken()) {
             return <Dashboard />;
         } else {
             return <Login />;

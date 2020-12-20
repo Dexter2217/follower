@@ -12,7 +12,7 @@ import Search from './Search';
 import '../scss/FollowedArtists.scss';
 const ARTIST_PER_PAGE = 10;
 
-const selectFollowedArtist = (state) => {
+const filterFollowedArtist = (state) => {
     let artists = (typeof state.followedArtists === "undefined") ? {} : state.followedArtists;
     return Array.from(artists).filter((artist) => matchesSearchTerm(artist, state.currentSearchTerm));
 }
@@ -66,7 +66,7 @@ class FollowedArtists extends Component {
 }
 function mapStateToProps(state) {
     return {
-        followedArtists: selectFollowedArtist(state),
+        followedArtists: filterFollowedArtist(state),
         currentPage: state.currentPage,
         currentSearchTerm: state.currentSearchTerm
     };

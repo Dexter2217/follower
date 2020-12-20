@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import FollowedArtists from './followed_artists';
+import FollowedArtists from './FollowedArtists';
 import Artist from './Artist';
 import '../scss/Dashboard.scss';
 
