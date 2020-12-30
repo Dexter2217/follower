@@ -6,11 +6,21 @@
 import _ from "lodash";
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
+import {createSelector} from 'reselect';
+
 import { fetchFollowedArtists, selectArtist } from "../actions";
 import Pagination from './Pagination';
 import Search from './Search';
 import '../scss/FollowedArtists.scss';
 const ARTIST_PER_PAGE = 10;
+
+
+const getFollowedArtists = (state) => { return state.followedArtists };
+const getCurrentSearchTerm = (state) => { return state.currentSearchTerm};
+
+const filterFollowedArtistCached = createSelector([getFollowedArtists, getCurrentSearchTerm], (followedArtists, currentSearchTerm) => {
+    return Array.from(followedArtists).filter(artist => matchesSearchTerm(artist, currentSearchTerm));
+});
 
 const filterFollowedArtist = (state) => {
     let artists = (typeof state.followedArtists === "undefined") ? {} : state.followedArtists;
@@ -66,7 +76,7 @@ class FollowedArtists extends Component {
 }
 function mapStateToProps(state) {
     return {
-        followedArtists: filterFollowedArtist(state),
+        followedArtists: filterFollowedArtistCached(state),
         currentPage: state.currentPage,
         currentSearchTerm: state.currentSearchTerm
     };
